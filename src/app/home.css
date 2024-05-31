@@ -12,16 +12,21 @@ main {
 .airdrops {
     border-collapse: collapse;
 
-    margin: 0 1rem;
+    margin: 0 5rem;
+
+    table-layout: fixed;
 
     th,
     td {
         padding: 0.5rem 1rem;
 
         text-align: center;
+        align-items: center;
 
         border: 1px solid var(--border-color);
         background-color: var(--main-gray);
+
+        white-space: nowrap;
     }
 
     th,
