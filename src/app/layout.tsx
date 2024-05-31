@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Open_Sans } from 'next/font/google';
 
+import Nav from '@/components/Nav';
+
 import { Web3Modal } from '@/context/Web3Modal';
 
 import './globals.css';
@@ -20,7 +22,10 @@ export default function RootLayout({
     return (
         <html lang='en'>
             <Web3Modal>
-                <body className={openSans.className}>{children}</body>
+                <body className={openSans.className}>
+                    <Nav />
+                    {children}
+                </body>
             </Web3Modal>
         </html>
     );
