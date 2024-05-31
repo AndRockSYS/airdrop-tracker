@@ -1,0 +1,33 @@
+section.add-airdrop {
+    display: none;
+
+    position: absolute;
+    top: 0;
+    z-index: 3;
+
+    width: 100dvw;
+    height: 100dvh;
+
+    background-color: rgba(10, 10, 10, 0.99);
+}
+
+form.add-airdrop {
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 1rem;
+
+    > input {
+        width: 30dvw;
+
+        font-size: 1.5rem;
+
+        background-color: var(--main-gray);
+        border: 1px solid var(--border-color);
+    }
+}
