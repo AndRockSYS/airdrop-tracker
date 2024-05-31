@@ -6,7 +6,8 @@ export function convertTimestampToDate(timestamp: number): string {
     return `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
 }
 
-export function stringToTags(input: string): Tag[] {
+export function stringToTags(input?: string): Tag[] {
+    if (!input) return [];
     const separated = input.split(' / ');
     return separated.map((item) => {
         return {
