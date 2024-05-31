@@ -1,6 +1,18 @@
+main {
+    position: relative;
+    width: 100dvw;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+
+    overflow: auto;
+}
+
 .airdrops {
-    margin: 0 1rem;
     border-collapse: collapse;
+
+    margin: 0 1rem;
 
     th,
     td {
