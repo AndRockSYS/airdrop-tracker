@@ -2,7 +2,7 @@
 
 import { createWeb3Modal, defaultConfig } from '@web3modal/ethers/react';
 
-const projectId = 'YOUR_PROJECT_ID';
+const projectId = '38c9ba5d9854cfbd32c3a45ea3c5a227';
 
 const mainnet = {
     chainId: 1,
