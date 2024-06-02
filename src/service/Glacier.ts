@@ -1,7 +1,7 @@
 import { GlacierClient } from '@glacier-network/client';
 import { Eip1193Provider } from 'ethers';
 
-import { Airdrop, Tag } from 'types';
+import { Airdrop, Tag, TagProp } from 'types';
 import Collection from '@glacier-network/client/dist/cjs/libs/Collection';
 
 const endpoint = 'https://web3storage.onebitdev.com/glacier-gateway';
@@ -15,14 +15,14 @@ export default class Glacier {
         const namespace = client.namespace('airdropsTracker');
 
         this.airdropCollection = namespace.dataset('airdrops').collection('tests');
-        this.tagsCollection = namespace.dataset('tags').collection('tag');
+        this.tagsCollection = namespace.dataset('database').collection('tags');
     }
 
     async getAirdrops(): Promise<Airdrop[]> {
         return await this.airdropCollection.find().toArray();
     }
 
-    async getAirdropId(name: string): Promise<string> {
+    private async getAirdropId(name: string): Promise<string> {
         const currectAirdrop = await this.airdropCollection.find({ name }).toArray();
         return currectAirdrop[0]._id;
     }
@@ -42,12 +42,19 @@ export default class Glacier {
         });
     }
 
-    async getTags(): Promise<Tag[]> {
-        return await this.tagsCollection.find().toArray();
+    async getAllTags(): Promise<Tag[]> {
+        return await this.tagsCollection
+            .find()
+            .toArray()
+            .catch((error) => []);
     }
 
-    async addTag(name: string) {
-        await this.tagsCollection.insertOne({ name });
+    async getTagsByProp(prop: TagProp): Promise<Tag[]> {
+        return await this.tagsCollection.find({ prop }).toArray();
+    }
+
+    async addTag(tag: Tag) {
+        await this.tagsCollection.insertOne(tag);
     }
 
     async deleteTag(name: string) {
