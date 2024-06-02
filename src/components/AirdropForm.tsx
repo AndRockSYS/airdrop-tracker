@@ -1,64 +1,136 @@
 'use client';
 
+import useTags from '@/hooks/useTags';
+import useGlacier from '@/hooks/useGlacier';
+import useTagsLists from '@/hooks/useTagsLists';
+
 import './form.css';
 
-import { Priority, Progress, Stage, Status, Tier } from '../../arrayTypings';
-
 export default function AirdropForm() {
-    const createdAt = Date.now();
+    const { glacier } = useGlacier();
+    const tags = useTags();
+    const tagsList = useTagsLists();
 
     const closeForm = () => {
-        const form = document.querySelector('section.add-airdrop') as HTMLElement;
+        const form = document.querySelector('section.airdrop-form') as HTMLElement;
         form.style.display = 'none';
     };
 
-    const collectData = () => {
+    const addAirdrop = () => {
         const inputs = document.querySelectorAll(
-            'section.add-airdrop > form > input'
+            'section.airdrop-form > form > input'
         ) as NodeListOf<HTMLInputElement>;
 
-        inputs.forEach((item) => {
-            console.log(item.value);
-        });
-    };
+        if (glacier)
+            glacier.addAirdrop({
+                name: inputs[0].value,
+                progress: inputs[1].value,
+                tags: inputs[2].value,
+                costToFarm: inputs[3].value,
+                chainTech: inputs[4].value,
+                stage: inputs[5].value,
+                tier: inputs[6].value,
+                priority: inputs[7].value,
+                status: inputs[8].value,
+                funding: Number(inputs[9].value),
+                val: Number(inputs[10].value),
 
-    const getDatalist = (id: string, array: string[]): JSX.Element => {
-        return (
-            <datalist id={id}>
-                {array.map((item) => (
-                    <option key={item} value={item}>
-                        {item}
-                    </option>
-                ))}
-            </datalist>
-        );
+                bridgeDateAt: Number(inputs[11].value),
+                firstTxAt: Number(inputs[12].value),
+
+                completion: inputs[13].value,
+
+                referralURL: inputs[14].value,
+
+                createdAt: Date.now(),
+                editedAt: Date.now(),
+            });
     };
 
     return (
-        <section className='add-airdrop'>
-            <form className='add-airdrop'>
+        <section className='airdrop-form'>
+            <form className='airdrop-form'>
                 <button type='button' id='button' onClick={closeForm}>
                     Close
                 </button>
 
-                <input type='text' placeholder='Name *' />
-                <input type='text' list='progresses' placeholder='Progress' />
-                {getDatalist('progresses', Progress)}
+                <input type='text' placeholder='Name' />
+                <input
+                    type='text'
+                    list='progress'
+                    placeholder='Progress'
+                    onChange={(event) => {
+                        tags.addTag(event, 'progress');
+                    }}
+                />
+                {tagsList.progress}
 
-                <input type='text' placeholder='Tags' />
-                <input type='text' placeholder='Cost To Farm' />
-                <input type='text' placeholder='Chain / Tech' />
-                <input type='text' list='stages' placeholder='Stage' />
-                {getDatalist('stages', Stage)}
+                <input
+                    type='text'
+                    list='tags'
+                    placeholder='Tags'
+                    onChange={(event) => {
+                        tags.addTag(event, 'tags');
+                    }}
+                />
+                {tagsList.tags}
+                <input
+                    type='text'
+                    list='costToFarm'
+                    placeholder='Cost To Farm'
+                    onChange={(event) => {
+                        tags.addTag(event, 'costToFarm');
+                    }}
+                />
+                {tagsList.costToFarm}
+                <input
+                    type='text'
+                    list='chainTech'
+                    placeholder='Chain / Tech'
+                    onChange={(event) => {
+                        tags.addTag(event, 'chainTech');
+                    }}
+                />
+                {tagsList.chainTech}
+                <input
+                    type='text'
+                    list='stage'
+                    placeholder='Stage'
+                    onChange={(event) => {
+                        tags.addTag(event, 'stage');
+                    }}
+                />
+                {tagsList.stage}
 
-                <input type='text' list='tiers' placeholder='Tier *' />
-                {getDatalist('tiers', Tier)}
+                <input
+                    type='text'
+                    list='tier'
+                    placeholder='Tier'
+                    onChange={(event) => {
+                        tags.addTag(event, 'tier');
+                    }}
+                />
+                {tagsList.tier}
 
-                <input type='text' list='priorities' placeholder='Priority' />
-                {getDatalist('priorities', Priority)}
+                <input
+                    type='text'
+                    list='priority'
+                    placeholder='Priority'
+                    onChange={(event) => {
+                        tags.addTag(event, 'priority');
+                    }}
+                />
+                {tagsList.prority}
 
-                <input type='text' list='statuses' placeholder='Status' />
-                {getDatalist('statuses', Status)}
+                <input
+                    type='text'
+                    list='status'
+                    placeholder='Status'
+                    onChange={(event) => {
+                        tags.addTag(event, 'status');
+                    }}
+                />
+                {tagsList.status}
 
                 <input type='text' placeholder='Funding' />
                 <input type='text' placeholder='Val' />
@@ -80,7 +152,7 @@ export default function AirdropForm() {
 
                 <input type='text' placeholder='Referral' />
 
-                <button type='button' id='button' onClick={collectData}>
+                <button type='button' id='button' onClick={addAirdrop}>
                     Add
                 </button>
             </form>
