@@ -1,15 +1,15 @@
 export type Airdrop = {
     name: string;
-    progress?: Progress;
+    progress?: string; //!t
     tags?: string; //!many t
 
     costToFarm?: string; //!many t
     chainTech?: string; //!many t
-    stage?: Stage;
+    stage?: string; //!t
 
-    tier: Tier;
-    priority: Priority;
-    status?: Status;
+    tier: string; //!t
+    priority: string; //!t
+    status?: string; //!t
     funding?: number;
     val?: number;
 
@@ -24,28 +24,18 @@ export type Airdrop = {
     editedAt: number;
 };
 
-export type Stage = 'Alpha' | 'Testnet' | 'Mainnet';
-
-export type Progress =
-    | 'Not Started'
-    | 'Planning'
-    | 'Unconfirmed'
-    | 'In Progress'
-    | 'Farming'
-    | 'Waiting for Announcement'
-    | 'Announced'
-    | 'Canceled'
-    | 'Ended'
-    | 'Claimed'
-    | 'Archieve'
-    | 'Snapshot Taken';
-
-export type Tier = 'S' | 'A' | 'B' | 'C' | 'D';
-
-export type Priority = 'Low' | 'Medium' | 'High';
-
-export type Status = 'Confirmed' | 'Points System' | 'Tokenless' | 'Lock Drop';
-
 export type Tag = {
     name: string;
+    color: string;
+    prop: TagProp;
 };
+
+export type TagProp =
+    | 'progress'
+    | 'tags'
+    | 'costToFarm'
+    | 'chainTech'
+    | 'stage'
+    | 'tier'
+    | 'priority'
+    | 'status';
