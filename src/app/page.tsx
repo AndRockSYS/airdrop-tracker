@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useWeb3ModalProvider } from '@web3modal/ethers/react';
 
-import Glacier from '@/service/Glacier';
+import useOwner from '@/hooks/useOwner';
+import useGlacier from '@/hooks/useGlacier';
 
 import AirdropRow from '@/components/AirdropRow';
 import AirdropForm from '@/components/AirdropForm';
@@ -11,22 +11,29 @@ import AirdropForm from '@/components/AirdropForm';
 import { Airdrop } from 'types';
 
 import './home.css';
+import useTags from '@/hooks/useTags';
 
 export default function Home() {
+    const { isOwner } = useOwner();
+    const { glacier } = useGlacier();
+    const { allTags } = useTags();
+
     const [airdrops, setAirdrops] = useState<Airdrop[]>([]);
-    const { walletProvider } = useWeb3ModalProvider();
+    const [ownersColums, setOwnersColumn] = useState(<></>);
 
     useEffect(() => {
-        if (walletProvider) {
-            const glacier = new Glacier(walletProvider);
-
+        if (glacier)
             glacier.getAirdrops().then((items) => {
                 setAirdrops(items);
             });
-        }
-    }, [walletProvider]);
 
-    const airdropList = useMemo(() => airdrops.map((airdrop) => AirdropRow(airdrop)), [airdrops]);
+        setOwnersColumn(isOwner ? <th>Interact</th> : <></>);
+    }, [glacier, isOwner]);
+
+    const airdropList = useMemo(
+        () => airdrops.map((airdrop) => AirdropRow(airdrop, isOwner, glacier, allTags)),
+        [airdrops, isOwner, allTags]
+    );
 
     return (
         <>
@@ -46,6 +53,7 @@ export default function Home() {
                             <th>Chain / Tech</th>
                             <th>Created</th>
                             <th>Last Edited</th>
+                            {ownersColums}
                         </tr>
                     </thead>
                     <tbody>{airdropList}</tbody>
