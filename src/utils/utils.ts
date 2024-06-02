@@ -1,17 +1,17 @@
 import { Tag } from 'types';
 
 export function convertTimestampToDate(timestamp: number): string {
-    const date = new Date(timestamp * 1000);
+    const date = new Date(timestamp);
 
     return `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
 }
 
-export function stringToTags(input?: string): Tag[] {
+export function stringToTags(input?: string): string[] {
     if (!input) return [];
-    const separated = input.split(' / ');
-    return separated.map((item) => {
-        return {
-            name: item,
-        };
-    });
+    return input.split(' / ');
+}
+
+export function tagsToString(tags: Tag[]): string {
+    const allNames = tags.map((tag) => tag.name);
+    return allNames.join(' / ');
 }
