@@ -1,0 +1,15 @@
+section.airdrop-page {
+    width: max-content;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    gap: 0.7rem 3rem;
+
+    background-color: rgba(255, 255, 255, 0.05);
+
+    > * {
+        width: stretch;
+        height: stretch;
+    }
+}
