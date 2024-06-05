@@ -1,5 +1,7 @@
 import Glacier from '@/service/Glacier';
 
+import { Dispatch, SetStateAction } from 'react';
+
 import { convertTimestampToDate } from '@/utils/utils';
 
 import { Airdrop, FormState } from 'types';
@@ -10,12 +12,33 @@ interface Props {
     glacier: Glacier | undefined;
     tagsToObjects: (tagsInput?: string) => JSX.Element[];
     openForm: (formState: FormState, airdrop?: Airdrop) => void;
+    setCurrentAirdrop: Dispatch<SetStateAction<Airdrop>>;
 }
 
-export default function AirdropRow({ airdrop, isOwner, glacier, tagsToObjects, openForm }: Props) {
+export default function AirdropRow({
+    airdrop,
+    isOwner,
+    glacier,
+    tagsToObjects,
+    openForm,
+    setCurrentAirdrop,
+}: Props) {
+    const openDescription = () => {
+        const page = document.querySelector('section.airdrop-page') as HTMLElement;
+
+        page.style.display = 'grid';
+    };
+
     return (
         <tr key={airdrop.name}>
-            <td>{airdrop.name}</td>
+            <td
+                onClick={() => {
+                    setCurrentAirdrop(airdrop);
+                    openDescription();
+                }}
+            >
+                {airdrop.name}
+            </td>
             <td>{tagsToObjects(airdrop.tier)}</td>
 
             <td>{tagsToObjects(airdrop.costToFarm)}</td>
