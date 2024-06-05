@@ -1,50 +1,92 @@
 'use client';
 
-import useTags from '@/hooks/useTags';
+import { ChangeEvent, useMemo } from 'react';
+
+import useForm from '@/hooks/useForm';
 import useGlacier from '@/hooks/useGlacier';
-import useTagsLists from '@/hooks/useTagsLists';
+import useTags from '@/hooks/useTags';
+
+import { stringToTagsNames } from '@/utils/utils';
+
+import { TagProp, FormState } from 'types';
 
 import './form.css';
 
 export default function AirdropForm() {
-    const { glacier } = useGlacier();
-    const tags = useTags();
-    const tagsList = useTagsLists();
+    const { manageAirdrop, currentAirdrop, addTagToList, deleteTagFromList, closeForm, formState } =
+        useForm();
 
-    const closeForm = () => {
-        const form = document.querySelector('section.airdrop-form') as HTMLElement;
-        form.style.display = 'none';
+    const { tags, tagsToObjects } = useTags();
+    const { glacier } = useGlacier();
+
+    const addNewTag = (event: ChangeEvent<HTMLInputElement>, prop: TagProp) => {
+        if (!glacier) return;
+
+        const tagRegex = /(\w+ \/ #.{6})/gm;
+        const value = event.target.value;
+
+        if (value == 'Add Tag') {
+            event.target.placeholder = 'Name / Color in Hex';
+            event.target.value = '';
+        } else if (tagRegex.test(value)) {
+            const input = value.match(tagRegex)?.[0];
+            const [name, color] = (input as string).split(' / ');
+            glacier.addTag({ name, color, prop });
+
+            event.target.value = '';
+            event.target.placeholder = prop;
+        }
     };
 
-    const addAirdrop = () => {
-        const inputs = document.querySelectorAll(
-            'section.airdrop-form > form > input'
-        ) as NodeListOf<HTMLInputElement>;
+    const tagInput = (placeholder: string, list: string, isMultiple?: boolean): JSX.Element => {
+        return (
+            <input
+                type='text'
+                list={list}
+                placeholder={placeholder}
+                onChange={
+                    isMultiple
+                        ? (event) => {
+                              addNewTag(event, list as TagProp);
+                              addTagToList(list as 'tags' | 'costToFarm' | 'chainTech', event);
+                          }
+                        : (event) => addNewTag(event, list as TagProp)
+                }
+            />
+        );
+    };
 
-        if (glacier)
-            glacier.addAirdrop({
-                name: inputs[0].value,
-                progress: inputs[1].value,
-                tags: inputs[2].value,
-                costToFarm: inputs[3].value,
-                chainTech: inputs[4].value,
-                stage: inputs[5].value,
-                tier: inputs[6].value,
-                priority: inputs[7].value,
-                status: inputs[8].value,
-                funding: Number(inputs[9].value),
-                val: Number(inputs[10].value),
+    const datalist = (prop: TagProp): JSX.Element => {
+        const list: JSX.Element[] = [];
 
-                bridgeDateAt: Number(inputs[11].value),
-                firstTxAt: Number(inputs[12].value),
-
-                completion: inputs[13].value,
-
-                referralURL: inputs[14].value,
-
-                createdAt: Date.now(),
-                editedAt: Date.now(),
+        if (tags) {
+            Object.entries(tags).map(([name, tag]) => {
+                if (tag.prop == prop)
+                    list.push(
+                        <option value={name} key={name}>
+                            {name}
+                        </option>
+                    );
             });
+        }
+
+        return (
+            <datalist id={prop}>
+                {list}
+                <option value='Add Tag'>Add Tag</option>
+            </datalist>
+        );
+    };
+
+    const dateInput = (placeholder: string): JSX.Element => {
+        return (
+            <input
+                type='text'
+                onFocus={(event) => (event.target.type = 'date')}
+                onBlur={(event) => (event.target.type = 'text')}
+                placeholder={placeholder}
+            />
+        );
     };
 
     return (
@@ -55,106 +97,73 @@ export default function AirdropForm() {
                 </button>
 
                 <input type='text' placeholder='Name' />
-                <input
-                    type='text'
-                    list='progress'
-                    placeholder='Progress'
-                    onChange={(event) => {
-                        tags.addTag(event, 'progress');
-                    }}
-                />
-                {tagsList.progress}
+                {tagInput('Progress', 'progress')}
+                {useMemo(() => datalist('progress'), [tags, tagsToObjects])}
 
-                <input
-                    type='text'
-                    list='tags'
-                    placeholder='Tags'
-                    onChange={(event) => {
-                        tags.addTag(event, 'tags');
-                    }}
-                />
-                {tagsList.tags}
-                <input
-                    type='text'
-                    list='costToFarm'
-                    placeholder='Cost To Farm'
-                    onChange={(event) => {
-                        tags.addTag(event, 'costToFarm');
-                    }}
-                />
-                {tagsList.costToFarm}
-                <input
-                    type='text'
-                    list='chainTech'
-                    placeholder='Chain / Tech'
-                    onChange={(event) => {
-                        tags.addTag(event, 'chainTech');
-                    }}
-                />
-                {tagsList.chainTech}
-                <input
-                    type='text'
-                    list='stage'
-                    placeholder='Stage'
-                    onChange={(event) => {
-                        tags.addTag(event, 'stage');
-                    }}
-                />
-                {tagsList.stage}
+                {tagInput('Tags', 'tags', true)}
+                {useMemo(() => datalist('tags'), [tags, tagsToObjects])}
+                <div>
+                    {useMemo(
+                        () =>
+                            stringToTagsNames(currentAirdrop.tags).map((tag, index) => (
+                                <h2 onClick={() => deleteTagFromList('tags', tag)} key={index}>
+                                    {tag}
+                                </h2>
+                            )),
+                        [currentAirdrop.tags]
+                    )}
+                </div>
 
-                <input
-                    type='text'
-                    list='tier'
-                    placeholder='Tier'
-                    onChange={(event) => {
-                        tags.addTag(event, 'tier');
-                    }}
-                />
-                {tagsList.tier}
+                {tagInput('Cost to Farm', 'costToFarm', true)}
+                {useMemo(() => datalist('costToFarm'), [tags, tagsToObjects])}
+                <div>
+                    {useMemo(() => {
+                        return stringToTagsNames(currentAirdrop.costToFarm).map((tag, index) => (
+                            <h2 onClick={() => deleteTagFromList('costToFarm', tag)} key={index}>
+                                {tag}
+                            </h2>
+                        ));
+                    }, [currentAirdrop.costToFarm])}
+                </div>
 
-                <input
-                    type='text'
-                    list='priority'
-                    placeholder='Priority'
-                    onChange={(event) => {
-                        tags.addTag(event, 'priority');
-                    }}
-                />
-                {tagsList.prority}
+                {tagInput('Chain / Tech', 'chainTech', true)}
+                {useMemo(() => datalist('chainTech'), [tags, tagsToObjects])}
+                <div>
+                    {useMemo(() => {
+                        return stringToTagsNames(currentAirdrop.chainTech).map((tag, index) => (
+                            <h2 onClick={() => deleteTagFromList('chainTech', tag)} key={index}>
+                                {tag}
+                            </h2>
+                        ));
+                    }, [currentAirdrop.chainTech])}
+                </div>
 
-                <input
-                    type='text'
-                    list='status'
-                    placeholder='Status'
-                    onChange={(event) => {
-                        tags.addTag(event, 'status');
-                    }}
-                />
-                {tagsList.status}
+                {tagInput('Stage', 'stage')}
+                {useMemo(() => datalist('stage'), [tags, tagsToObjects])}
+                {tagInput('Tier', 'tier')}
+                {useMemo(() => datalist('tier'), [tags, tagsToObjects])}
+                {tagInput('Priority', 'priority')}
+                {useMemo(() => datalist('priority'), [tags, tagsToObjects])}
+                {tagInput('Status', 'status')}
+                {useMemo(() => datalist('status'), [tags, tagsToObjects])}
 
                 <input type='text' placeholder='Funding' />
                 <input type='text' placeholder='Val' />
 
-                <input
-                    type='text'
-                    onFocus={(e) => (e.target.type = 'date')}
-                    onBlur={(e) => (e.target.type = 'text')}
-                    placeholder='Bridge Date'
-                />
-                <input
-                    type='text'
-                    onFocus={(e) => (e.target.type = 'date')}
-                    onBlur={(e) => (e.target.type = 'text')}
-                    placeholder='First Tx'
-                />
+                {dateInput('Bridge Date')}
+                {dateInput('First Tx')}
 
-                <input type='number' placeholder='Completion' />
-
+                <input type='text' placeholder='Completion' />
                 <input type='text' placeholder='Referral' />
 
-                <button type='button' id='button' onClick={addAirdrop}>
-                    Add
-                </button>
+                {useMemo(
+                    () => (
+                        <button type='button' id='button' onClick={() => manageAirdrop()}>
+                            {formState == FormState.Add ? 'Add' : 'Update'}
+                        </button>
+                    ),
+                    [formState, currentAirdrop]
+                )}
             </form>
         </section>
     );
