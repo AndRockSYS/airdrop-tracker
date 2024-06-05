@@ -1,15 +1,37 @@
 section.airdrop-page {
-    width: max-content;
+    z-index: 5;
+    position: fixed;
+    translate: 0 4rem;
+    top: 0;
+    right: 0;
 
-    display: grid;
+    overflow-x: hidden;
+
+    height: calc(100% - 4rem);
+    width: 50%;
+
+    padding: 2rem;
+
+    display: none;
     grid-template-columns: repeat(2, 1fr);
     align-items: center;
     gap: 0.7rem 3rem;
 
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(40, 40, 40, 1);
 
-    > * {
+    text-align: center;
+
+    > div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    * {
         width: stretch;
-        height: stretch;
+    }
+
+    @media screen and (max-width: 900px) {
+        width: 100%;
     }
 }

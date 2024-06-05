@@ -10,6 +10,12 @@ interface Props {
 }
 
 export default function AirdropPage({ airdrop, tagsToObjects }: Props) {
+    const closePage = () => {
+        const page = document.querySelector('section.airdrop-page') as HTMLElement;
+
+        page.style.display = 'none';
+    };
+
     return (
         <section className='airdrop-page'>
             <h2>Name</h2>
@@ -52,6 +58,9 @@ export default function AirdropPage({ airdrop, tagsToObjects }: Props) {
             <h3>{convertTimestampToDate(airdrop.createdAt)}</h3>
             <h3>Last Editer Tx</h3>
             <h3>{convertTimestampToDate(airdrop.editedAt)}</h3>
+            <button id='button' onClick={closePage}>
+                Close
+            </button>
         </section>
     );
 }
