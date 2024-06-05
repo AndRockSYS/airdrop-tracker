@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 export type Airdrop = {
     name: string;
     progress?: string; //!t
@@ -39,3 +41,17 @@ export type TagProp =
     | 'tier'
     | 'priority'
     | 'status';
+
+export enum FormState {
+    Add,
+    Edit,
+}
+
+export interface Context {
+    currentAirdrop: Airdrop;
+    setCurrentAirdrop: Dispatch<SetStateAction<Airdrop>>;
+    tags: { [key: string]: Tag };
+    setTags: Dispatch<SetStateAction<{ [key: string]: Tag }>>;
+    formState: FormState;
+    setFormState: Dispatch<SetStateAction<FormState>>;
+}
