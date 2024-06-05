@@ -2,7 +2,7 @@ import { convertTimestampToDate } from '@/utils/utils';
 
 import { Airdrop } from 'types';
 
-import './page.css';
+import './description.css';
 
 interface Props {
     airdrop: Airdrop;
