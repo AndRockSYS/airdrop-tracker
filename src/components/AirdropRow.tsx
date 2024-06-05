@@ -1,37 +1,31 @@
-import { convertTimestampToDate, stringToTags } from '@/utils/utils';
-
 import Glacier from '@/service/Glacier';
 
-import { Airdrop, Tag } from 'types';
+import { convertTimestampToDate } from '@/utils/utils';
 
-export default function AirdropRow(
-    airdrop: Airdrop,
-    isOwner: boolean,
-    glacier: Glacier | undefined,
-    tags: { [key: string]: Tag } | undefined
-) {
-    const tagsToObjects = (input: string | undefined): JSX.Element[] => {
-        return stringToTags(input).map((tagName) => {
-            return (
-                <div
-                    id='tag'
-                    key={tagName}
-                    style={{ backgroundColor: tags && tags[tagName] ? tags[tagName].color : '' }}
-                >
-                    {tagName}
-                </div>
-            );
-        });
-    };
+import { Airdrop, FormState } from 'types';
+
+interface Props {
+    airdrop: Airdrop;
+    isOwner: boolean;
+    glacier: Glacier | undefined;
+    tagsToObjects: (tagsInput?: string) => JSX.Element[];
+    openForm: (formState: FormState, airdrop?: Airdrop) => void;
+}
+
+export default function AirdropRow({ airdrop, isOwner, glacier, tagsToObjects, openForm }: Props) {
     return (
         <tr key={airdrop.name}>
             <td>{airdrop.name}</td>
-            <td>{airdrop.tier}</td>
+            <td>{tagsToObjects(airdrop.tier)}</td>
+
             <td>{tagsToObjects(airdrop.costToFarm)}</td>
-            <td>{airdrop.status}</td>
-            <td>{airdrop.progress}</td>
+
+            <td>{tagsToObjects(airdrop.status)}</td>
+            <td>{tagsToObjects(airdrop.progress)}</td>
+
             <td>{airdrop.funding ? `$${airdrop.funding}` : ''}</td>
             <td>{airdrop.val ? `$${airdrop.val}` : ''}</td>
+
             <td>{airdrop.stage}</td>
 
             <td>{tagsToObjects(airdrop.tags)}</td>
@@ -39,9 +33,13 @@ export default function AirdropRow(
 
             <td>{convertTimestampToDate(airdrop.createdAt)}</td>
             <td>{convertTimestampToDate(airdrop.editedAt)}</td>
+
             {isOwner ? (
                 <td>
-                    <button id='button'>Edit</button>
+                    <button id='button' onClick={() => openForm(FormState.Edit, airdrop)}>
+                        Edit
+                    </button>
+
                     <button
                         id='button'
                         onClick={() => {
