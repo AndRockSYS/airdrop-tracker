@@ -1,42 +1,49 @@
-import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect } from 'react';
 
 import useGlacier from './useGlacier';
 
-import { Tag, TagProp } from 'types';
+import { DataContext } from '@/context/AppContext';
+
+import { stringToTagsNames } from '@/utils/utils';
+
+import { Tag } from 'types';
 
 const useTags = () => {
     const { glacier } = useGlacier();
 
-    const allTags = useMemo(() => {
+    const { tags, setTags } = useContext(DataContext);
+
+    useEffect(() => {
         if (!glacier) return;
 
         const result: { [key: string]: Tag } = {};
+
         glacier.getAllTags().then((tags) => {
             tags.map((tag) => (result[tag.name] = tag));
         });
-        return result;
+
+        setTags(result);
     }, [glacier]);
 
-    const addTag = (event: ChangeEvent<HTMLInputElement>, prop: TagProp) => {
-        if (!glacier) return;
+    const tagsToObjects = (tagsInput?: string): JSX.Element[] => {
+        if (!tagsInput) return [];
 
-        const tagRegex = /(\w+ \/ #.{6})/gm;
-        const value = event.target.value;
-
-        if (value == 'Add Tag') {
-            event.target.placeholder = 'Name / Color in Hex';
-            event.target.value = '';
-        } else if (tagRegex.test(value)) {
-            const input = value.match(tagRegex)?.[0];
-            const [name, color] = (input as string).split(' / ');
-            glacier.addTag({ name, color, prop });
-
-            event.target.value = '';
-            event.target.placeholder = prop;
-        }
+        return stringToTagsNames(tagsInput).map((tagName, index) => {
+            return (
+                <div
+                    id='tag'
+                    key={index}
+                    style={{
+                        backgroundColor: tags && tags[tagName] ? tags[tagName].color : '',
+                    }}
+                >
+                    {tagName}
+                </div>
+            );
+        });
     };
 
-    return { addTag, allTags };
+    return { tags, tagsToObjects };
 };
 
 export default useTags;
