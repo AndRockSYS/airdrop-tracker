@@ -22,6 +22,11 @@ export default class Glacier {
         return await this.airdropCollection.find().toArray();
     }
 
+    async getAirdropByName(name: string): Promise<Airdrop> {
+        const array = await this.airdropCollection.find({ name }).toArray();
+        return array[0];
+    }
+
     private async getAirdropId(name: string): Promise<string> {
         const currectAirdrop = await this.airdropCollection.find({ name }).toArray();
         return currectAirdrop[0]._id;
@@ -43,21 +48,14 @@ export default class Glacier {
     }
 
     async getAllTags(): Promise<Tag[]> {
-        return await this.tagsCollection
-            .find()
-            .toArray()
-            .catch((error) => []);
-    }
-
-    async getTagsByProp(prop: TagProp): Promise<Tag[]> {
-        return await this.tagsCollection.find({ prop }).toArray();
+        return await this.tagsCollection.find().toArray();
     }
 
     async addTag(tag: Tag) {
         await this.tagsCollection.insertOne(tag);
     }
 
-    async deleteTag(name: string) {
-        await this.tagsCollection.deleteOne({ name });
-    }
+    // async deleteTag(name: string) {
+    //     await this.tagsCollection.deleteOne({ name });
+    // }
 }
