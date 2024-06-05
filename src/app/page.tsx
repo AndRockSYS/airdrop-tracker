@@ -27,7 +27,32 @@ export default function Home() {
 
     const [sortProperty, setSortProperty] = useState('');
 
-    const updateSortByColumn = (event: MouseEvent) => {};
+    useEffect(() => {
+        const heads = document.querySelectorAll(
+            'table > thead > tr > th'
+        ) as NodeListOf<HTMLElement>;
+
+        const dictionary: { [key: string]: number } = {
+            name: 0,
+            tier: 1,
+            costToFarm: 2,
+            status: 3,
+            progress: 4,
+            funding: 5,
+            val: 6,
+            stage: 7,
+            tags: 8,
+            chainTech: 9,
+            createdAt: 10,
+            editedAt: 11,
+        };
+
+        heads.forEach((item) => {
+            item.style.fontWeight = '400';
+        });
+
+        heads[dictionary[sortProperty]].style.fontWeight = '600';
+    }, [sortProperty]);
 
     useEffect(() => {
         setOwnerColumn(isOwner ? <th>Interact</th> : <></>);

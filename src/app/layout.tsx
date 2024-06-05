@@ -8,7 +8,7 @@ import { AppContext } from '@/context/AppContext';
 
 import './globals.css';
 
-const openSans = Open_Sans({ subsets: ['latin'], weight: '400' });
+const openSans = Open_Sans({ subsets: ['latin'], weight: ['400', '500', '600'] });
 
 export const metadata: Metadata = {
     title: 'Airdrop Tracker',
