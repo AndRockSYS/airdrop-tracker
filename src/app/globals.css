@@ -47,8 +47,12 @@ a {
 }
 
 #tag {
-    padding: 0.2rem;
-    margin: 0.1rem;
+    width: fit-content;
+
+    padding: 0.3rem 1rem;
+    margin: 0 1rem;
 
     border-radius: 3px;
+
+    text-align: center;
 }
