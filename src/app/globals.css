@@ -10,13 +10,14 @@
 
     color: rgba(255, 255, 255, 0.8);
 
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 400;
 }
 
 html,
 body {
-    width: fit-content;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 body {

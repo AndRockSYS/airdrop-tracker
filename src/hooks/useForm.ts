@@ -80,6 +80,7 @@ const useForm = () => {
         openForm,
         closeForm,
 
+        setCurrentAirdrop,
         currentAirdrop,
         manageAirdrop,
 
