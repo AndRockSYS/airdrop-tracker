@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import useOwner from '@/hooks/useOwner';
 import useGlacier from '@/hooks/useGlacier';
@@ -9,6 +9,9 @@ import useForm from '@/hooks/useForm';
 
 import AirdropRow from '@/components/AirdropRow';
 import AirdropForm from '@/components/AirdropForm';
+import AirdropDescription from '@/components/AirdropDescription';
+
+import { sortBy } from '@/utils/airdrop-utils';
 
 import './home.css';
 
@@ -16,21 +19,25 @@ export default function Home() {
     const { isOwner } = useOwner();
     const { glacier } = useGlacier();
     const { tags, tagsToObjects } = useTags();
-    const { openForm } = useForm();
+    const { openForm, currentAirdrop, setCurrentAirdrop } = useForm();
 
     const [list, setList] = useState<JSX.Element[]>([]);
 
     const [ownerColumn, setOwnerColumn] = useState<JSX.Element>(<></>);
+
+    const [sortProperty, setSortProperty] = useState('');
+
+    const updateSortByColumn = (event: MouseEvent) => {};
 
     useEffect(() => {
         setOwnerColumn(isOwner ? <th>Interact</th> : <></>);
     }, [isOwner]);
 
     useEffect(() => {
-        if (glacier) {
+        if (glacier && tags) {
             glacier.getAirdrops().then((aidrops) => {
                 setList(
-                    aidrops.map((airdrop) => (
+                    sortBy(aidrops, sortProperty).map((airdrop) => (
                         <AirdropRow
                             key={airdrop.name}
                             airdrop={airdrop}
@@ -38,12 +45,13 @@ export default function Home() {
                             glacier={glacier}
                             tagsToObjects={tagsToObjects}
                             openForm={openForm}
+                            setCurrentAirdrop={setCurrentAirdrop}
                         />
                     ))
                 );
             });
         }
-    }, [glacier, isOwner, tags]);
+    }, [glacier, isOwner, tags, sortProperty, sortBy]);
 
     return (
         <>
@@ -51,18 +59,18 @@ export default function Home() {
                 <table className='airdrops'>
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Tier</th>
-                            <th>Cost to Farm</th>
-                            <th>Status</th>
-                            <th>Progress</th>
-                            <th>Funding (M)</th>
-                            <th>Val (M)</th>
-                            <th>Stage</th>
-                            <th>Tags</th>
-                            <th>Chain / Tech</th>
-                            <th>Created</th>
-                            <th>Last Edited</th>
+                            <th onClick={() => setSortProperty('name')}>Name</th>
+                            <th onClick={() => setSortProperty('tier')}>Tier</th>
+                            <th onClick={() => setSortProperty('costToFarm')}>Cost to Farm</th>
+                            <th onClick={() => setSortProperty('status')}>Status</th>
+                            <th onClick={() => setSortProperty('progress')}>Progress</th>
+                            <th onClick={() => setSortProperty('funding')}>Funding (M)</th>
+                            <th onClick={() => setSortProperty('val')}>Val (M)</th>
+                            <th onClick={() => setSortProperty('stage')}>Stage</th>
+                            <th onClick={() => setSortProperty('tags')}>Tags</th>
+                            <th onClick={() => setSortProperty('chainTech')}>Chain / Tech</th>
+                            <th onClick={() => setSortProperty('createdAt')}>Created</th>
+                            <th onClick={() => setSortProperty('editedAt')}>Last Edited</th>
                             {ownerColumn}
                         </tr>
                     </thead>
@@ -70,6 +78,12 @@ export default function Home() {
                 </table>
             </main>
             <AirdropForm />
+            {useMemo(
+                () => (
+                    <AirdropDescription airdrop={currentAirdrop} tagsToObjects={tagsToObjects} />
+                ),
+                [currentAirdrop, tags]
+            )}
         </>
     );
 }
