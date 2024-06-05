@@ -1,39 +1,49 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import useOwner from '@/hooks/useOwner';
 import useGlacier from '@/hooks/useGlacier';
+import useTags from '@/hooks/useTags';
+import useForm from '@/hooks/useForm';
 
 import AirdropRow from '@/components/AirdropRow';
 import AirdropForm from '@/components/AirdropForm';
 
-import { Airdrop } from 'types';
-
 import './home.css';
-import useTags from '@/hooks/useTags';
 
 export default function Home() {
     const { isOwner } = useOwner();
     const { glacier } = useGlacier();
-    const { allTags } = useTags();
+    const { tags, tagsToObjects } = useTags();
+    const { openForm } = useForm();
 
-    const [airdrops, setAirdrops] = useState<Airdrop[]>([]);
-    const [ownersColums, setOwnersColumn] = useState(<></>);
+    const [list, setList] = useState<JSX.Element[]>([]);
+
+    const [ownerColumn, setOwnerColumn] = useState<JSX.Element>(<></>);
 
     useEffect(() => {
-        if (glacier)
-            glacier.getAirdrops().then((items) => {
-                setAirdrops(items);
+        setOwnerColumn(isOwner ? <th>Interact</th> : <></>);
+    }, [isOwner]);
+
+    useEffect(() => {
+        if (glacier) {
+            glacier.getAirdrops().then((aidrops) => {
+                setList(
+                    aidrops.map((airdrop) => (
+                        <AirdropRow
+                            key={airdrop.name}
+                            airdrop={airdrop}
+                            isOwner={isOwner}
+                            glacier={glacier}
+                            tagsToObjects={tagsToObjects}
+                            openForm={openForm}
+                        />
+                    ))
+                );
             });
-
-        setOwnersColumn(isOwner ? <th>Interact</th> : <></>);
-    }, [glacier, isOwner]);
-
-    const airdropList = useMemo(
-        () => airdrops.map((airdrop) => AirdropRow(airdrop, isOwner, glacier, allTags)),
-        [airdrops, isOwner, allTags]
-    );
+        }
+    }, [glacier, isOwner, tags]);
 
     return (
         <>
@@ -53,10 +63,10 @@ export default function Home() {
                             <th>Chain / Tech</th>
                             <th>Created</th>
                             <th>Last Edited</th>
-                            {ownersColums}
+                            {ownerColumn}
                         </tr>
                     </thead>
-                    <tbody>{airdropList}</tbody>
+                    <tbody>{list}</tbody>
                 </table>
             </main>
             <AirdropForm />
