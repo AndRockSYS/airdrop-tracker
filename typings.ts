@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 
-export type Airdrop = {
+export interface Airdrop {
     name: string;
     progress?: string; //!t
     tags?: string; //!many t
@@ -24,7 +24,7 @@ export type Airdrop = {
 
     createdAt: number;
     editedAt: number;
-};
+}
 
 export type Tag = {
     name: string;

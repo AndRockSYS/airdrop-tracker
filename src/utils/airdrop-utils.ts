@@ -1,11 +1,10 @@
 import { Airdrop } from 'types';
 
-export const sortBy = (airdrops: Airdrop[], property?: string): Airdrop[] => {
-    if (!property) return airdrops.sort((a, b) => a.editedAt - b.editedAt);
+export const sortBy = (airdrops: Airdrop[], property: string): Airdrop[] => {
+    return airdrops.sort((a, b) => {
+        const aProp = a[property as keyof Airdrop];
+        const bProp = b[property as keyof Airdrop];
 
-    const prop = property as keyof Airdrop;
-
-    return airdrops.sort((a, b) =>
-        (a[prop] ? a[prop] : '').toString().localeCompare((b[prop] ? b[prop] : '').toString())
-    );
+        return (aProp ? aProp : '').toString().localeCompare((bProp ? bProp : '').toString());
+    });
 };

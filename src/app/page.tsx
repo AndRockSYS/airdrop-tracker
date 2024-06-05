@@ -25,7 +25,7 @@ export default function Home() {
 
     const [ownerColumn, setOwnerColumn] = useState<JSX.Element>(<></>);
 
-    const [sortProperty, setSortProperty] = useState('');
+    const [sortProperty, setSortProperty] = useState('name');
 
     useEffect(() => {
         const heads = document.querySelectorAll(
