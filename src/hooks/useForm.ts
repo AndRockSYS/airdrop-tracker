@@ -73,7 +73,14 @@ const useForm = () => {
 
         inputs.forEach((input) => (input.value = ''));
 
-        setCurrentAirdrop({ name: '', tier: '', priority: '', createdAt: 0, editedAt: 0 });
+        setCurrentAirdrop({
+            name: '',
+            tier: '',
+            priority: '',
+            createdAt: 0,
+            editedAt: 0,
+            snapshot: false,
+        });
     };
 
     return {
