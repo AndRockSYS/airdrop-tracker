@@ -4,10 +4,10 @@ import { convertDateToTimestamp, convertTimestampToInputDate } from './utils';
 
 const inputsToAirdrop = (airdrop: Airdrop): Airdrop => {
     const inputs = document.querySelectorAll(
-        'section.airdrop-form > form > input'
+        'section.airdrop-form > form input, section.airdrop-form > form > textarea'
     ) as NodeListOf<HTMLInputElement>;
 
-    console.log(convertDateToTimestamp(inputs[11].value), convertDateToTimestamp(inputs[12].value));
+    console.log(inputs.length);
 
     return {
         name: inputs[0].value,
@@ -31,12 +31,18 @@ const inputsToAirdrop = (airdrop: Airdrop): Airdrop => {
 
         createdAt: airdrop.createdAt > 0 ? airdrop.createdAt : Date.now(),
         editedAt: Date.now(),
+
+        snapshot: inputs[15].checked,
+        image: inputs[16].value,
+
+        description: inputs[17].value,
+        tasks: inputs[18].value,
     };
 };
 
 const airdropToInputs = (airdrop: Airdrop) => {
     const inputs = document.querySelectorAll(
-        'section.airdrop-form > form > input'
+        'section.airdrop-form > form input, section.airdrop-form > form > textarea'
     ) as NodeListOf<HTMLInputElement>;
 
     inputs[0].value = airdrop.name;
@@ -56,6 +62,12 @@ const airdropToInputs = (airdrop: Airdrop) => {
     inputs[13].value = airdrop.completion ? airdrop.completion : '';
 
     inputs[14].value = airdrop.referralURL ? airdrop.referralURL : '';
+
+    inputs[15].checked = airdrop.snapshot;
+    inputs[16].value = airdrop.image ? airdrop.image : '';
+
+    inputs[17].value = airdrop.description ? airdrop.description : '';
+    inputs[18].value = airdrop.tasks ? airdrop.tasks : '';
 };
 
 export { inputsToAirdrop, airdropToInputs };
