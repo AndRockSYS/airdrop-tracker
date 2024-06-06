@@ -62,7 +62,7 @@ export default function Home() {
     }, [isOwner]);
 
     useEffect(() => {
-        if (glacier && tags) {
+        if (glacier) {
             glacier.getAirdrops().then((aidrops) => {
                 setList(
                     sortBy(aidrops, sortProperty).map((airdrop) => (
