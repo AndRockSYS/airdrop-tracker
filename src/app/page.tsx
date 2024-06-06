@@ -6,6 +6,7 @@ import useOwner from '@/hooks/useOwner';
 import useGlacier from '@/hooks/useGlacier';
 import useTags from '@/hooks/useTags';
 import useForm from '@/hooks/useForm';
+import usePinned from '@/hooks/usePinned';
 
 import AirdropRow from '@/components/AirdropRow';
 import AirdropForm from '@/components/AirdropForm';
@@ -16,6 +17,11 @@ import { sortBy } from '@/utils/airdrop-utils';
 import './home.css';
 import { FormState } from 'types';
 
+enum Page {
+    Main,
+    Pinned,
+}
+
 export default function Home() {
     const { isOwner } = useOwner();
     const { glacier } = useGlacier();
@@ -23,6 +29,8 @@ export default function Home() {
     const { openForm, currentAirdrop, setCurrentAirdrop } = useForm();
 
     const [list, setList] = useState<JSX.Element[]>([]);
+    const { pinned, addPinned, removePinned } = usePinned();
+    const [page, setPage] = useState<Page>(Page.Main);
 
     const [ownerColumn, setOwnerColumn] = useState<JSX.Element>(<></>);
 
@@ -58,32 +66,66 @@ export default function Home() {
     }, [sortProperty]);
 
     useEffect(() => {
+        const btns = document.querySelectorAll('.pages > h3') as NodeListOf<HTMLElement>;
+
+        console.log(btns.length);
+
+        btns.forEach((btn) => {
+            btn.style.color = 'var(--text-color)';
+        });
+
+        btns[page == Page.Main ? 0 : 1].style.color = 'var(--accent-color)';
+    }, [page]);
+
+    useEffect(() => {
         setOwnerColumn(isOwner ? <th>Interact</th> : <></>);
     }, [isOwner]);
 
     useEffect(() => {
-        if (glacier) {
-            glacier.getAirdrops().then((aidrops) => {
-                setList(
-                    sortBy(aidrops, sortProperty).map((airdrop) => (
-                        <AirdropRow
-                            key={airdrop.name}
-                            airdrop={airdrop}
-                            isOwner={isOwner}
-                            glacier={glacier}
-                            tagsToObjects={tagsToObjects}
-                            openForm={openForm}
-                            setCurrentAirdrop={setCurrentAirdrop}
-                        />
-                    ))
-                );
-            });
+        if (page == Page.Main) {
+            if (glacier) {
+                glacier.getAirdrops().then((aidrops) => {
+                    setList(
+                        sortBy(aidrops, sortProperty).map((airdrop) => (
+                            <AirdropRow
+                                key={airdrop.name}
+                                airdrop={airdrop}
+                                isOwner={isOwner}
+                                glacier={glacier}
+                                tagsToObjects={tagsToObjects}
+                                openForm={openForm}
+                                setCurrentAirdrop={setCurrentAirdrop}
+                                addPinned={addPinned}
+                                page={page}
+                                removePinned={removePinned}
+                            />
+                        ))
+                    );
+                });
+            }
+        } else {
+            setList(
+                sortBy(pinned, sortProperty).map((airdrop) => (
+                    <AirdropRow
+                        key={airdrop.name}
+                        airdrop={airdrop}
+                        isOwner={isOwner}
+                        glacier={glacier}
+                        tagsToObjects={tagsToObjects}
+                        openForm={openForm}
+                        setCurrentAirdrop={setCurrentAirdrop}
+                        addPinned={addPinned}
+                        page={page}
+                        removePinned={removePinned}
+                    />
+                ))
+            );
         }
 
         document.addEventListener('airdrops', () => setCall(!call));
 
         return () => document.removeEventListener('airdrops', () => setCall(!call));
-    }, [glacier, isOwner, tags, sortProperty, sortBy, call, setCall]);
+    }, [glacier, isOwner, tags, sortProperty, sortBy, call, setCall, page, pinned]);
 
     const [addButton, setAddButton] = useState(<></>);
 
@@ -100,6 +142,10 @@ export default function Home() {
     return (
         <>
             <main>
+                <div className='pages'>
+                    <h3 onClick={() => setPage(Page.Main)}>Active Airdrop</h3>
+                    <h3 onClick={() => setPage(Page.Pinned)}>Pinned</h3>
+                </div>
                 <table>
                     <thead>
                         <tr>
