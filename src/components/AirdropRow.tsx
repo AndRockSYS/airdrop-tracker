@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useMemo } from 'react';
 import Image from 'next/image';
 
 import Glacier from '@/service/Glacier';
@@ -64,23 +64,27 @@ export default function AirdropRow({
             <td>{convertTimestampToDate(airdrop.createdAt)}</td>
             <td>{convertTimestampToDate(airdrop.editedAt)}</td>
 
-            {isOwner ? (
-                <td>
-                    <button id='button' onClick={() => openForm(FormState.Edit, airdrop)}>
-                        Edit
-                    </button>
+            {useMemo(
+                () =>
+                    isOwner ? (
+                        <td>
+                            <button id='button' onClick={() => openForm(FormState.Edit, airdrop)}>
+                                Edit
+                            </button>
 
-                    <button
-                        id='button'
-                        onClick={() => {
-                            if (glacier) glacier.deleteAirdrop(airdrop.name);
-                        }}
-                    >
-                        Delete
-                    </button>
-                </td>
-            ) : (
-                <></>
+                            <button
+                                id='button'
+                                onClick={() => {
+                                    if (glacier) glacier.deleteAirdrop(airdrop.name);
+                                }}
+                            >
+                                Delete
+                            </button>
+                        </td>
+                    ) : (
+                        <></>
+                    ),
+                [isOwner]
             )}
         </tr>
     );
