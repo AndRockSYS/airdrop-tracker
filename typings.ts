@@ -2,16 +2,16 @@ import { Dispatch, SetStateAction } from 'react';
 
 export interface Airdrop {
     name: string;
-    progress?: string; //!t
-    tags?: string; //!many t
+    progress?: string;
+    tags?: string;
 
-    costToFarm?: string; //!many t
-    chainTech?: string; //!many t
-    stage?: string; //!t
+    costToFarm?: string;
+    chainTech?: string;
+    stage?: string;
 
-    tier: string; //!t
-    priority: string; //!t
-    status?: string; //!t
+    tier: string;
+    priority: string;
+    status?: string;
     funding?: number;
     val?: number;
 
@@ -24,6 +24,12 @@ export interface Airdrop {
 
     createdAt: number;
     editedAt: number;
+
+    snapshot: boolean;
+    image?: string;
+
+    description?: string;
+    tasks?: string;
 }
 
 export type Tag = {
@@ -45,6 +51,11 @@ export type TagProp =
 export enum FormState {
     Add,
     Edit,
+}
+
+export enum Theme {
+    Light,
+    Dark,
 }
 
 export interface Context {
