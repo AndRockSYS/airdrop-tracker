@@ -31,11 +31,16 @@ export default function AirdropForm() {
         } else if (tagRegex.test(value)) {
             const input = value.match(tagRegex)?.[0];
             const [name, color] = (input as string).split(' / ');
-            console.log(input, name, color);
+
             glacier.addTag({ name, color, prop });
 
             event.target.value = '';
             event.target.placeholder = prop;
+
+            new Promise((resolve) => setTimeout(resolve, 5_000)).then(() => {
+                const recallTags = new CustomEvent('call');
+                document.dispatchEvent(recallTags);
+            });
         }
     };
 
