@@ -9,6 +9,7 @@ const empty: Airdrop = {
     priority: '',
     createdAt: 0,
     editedAt: 0,
+    snapshot: false,
 };
 
 export const DataContext = createContext<Context>({
