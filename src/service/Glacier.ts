@@ -12,10 +12,10 @@ export default class Glacier {
 
     constructor(provider: Eip1193Provider) {
         const client = new GlacierClient(endpoint, { provider });
-        const namespace = client.namespace('airdropsTracker');
+        const namespace = client.namespace('tests');
 
-        this.airdropCollection = namespace.dataset('airdrops').collection('tests');
-        this.tagsCollection = namespace.dataset('database').collection('tags');
+        this.airdropCollection = namespace.dataset('airdropTracker').collection('airdrops');
+        this.tagsCollection = namespace.dataset('airdropTracker').collection('tags');
     }
 
     async getAirdrops(): Promise<Airdrop[]> {
