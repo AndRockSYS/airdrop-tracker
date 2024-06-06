@@ -48,10 +48,10 @@ export default function Home() {
         };
 
         heads.forEach((item) => {
-            item.style.fontWeight = '400';
+            item.style.color = 'var(--text-color)';
         });
 
-        heads[dictionary[sortProperty]].style.fontWeight = '600';
+        heads[dictionary[sortProperty]].style.color = 'var(--accent-color)';
     }, [sortProperty]);
 
     useEffect(() => {
