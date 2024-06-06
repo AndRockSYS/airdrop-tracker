@@ -26,7 +26,7 @@ export default function AirdropRow({
     const openDescription = () => {
         const page = document.querySelector('section.airdrop-page') as HTMLElement;
 
-        page.style.display = 'grid';
+        page.style.display = 'flex';
     };
 
     return (
