@@ -1,6 +1,7 @@
-import Glacier from '@/service/Glacier';
-
 import { Dispatch, SetStateAction } from 'react';
+import Image from 'next/image';
+
+import Glacier from '@/service/Glacier';
 
 import { convertTimestampToDate } from '@/utils/utils';
 
@@ -37,6 +38,12 @@ export default function AirdropRow({
                     openDescription();
                 }}
             >
+                <Image
+                    src={airdrop.image ? airdrop.image : '/blank.svg'}
+                    alt={airdrop.name}
+                    width={25}
+                    height={25}
+                ></Image>
                 {airdrop.name}
             </td>
             <td>{tagsToObjects(airdrop.tier)}</td>
