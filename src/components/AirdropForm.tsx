@@ -22,7 +22,7 @@ export default function AirdropForm() {
     const addNewTag = (event: ChangeEvent<HTMLInputElement>, prop: TagProp) => {
         if (!glacier) return;
 
-        const tagRegex = /(\w+ \/ #.{6})/gm;
+        const tagRegex = /(\w.+ \/ #.{6})/gm;
         const value = event.target.value;
 
         if (value == 'Add Tag') {
@@ -31,6 +31,7 @@ export default function AirdropForm() {
         } else if (tagRegex.test(value)) {
             const input = value.match(tagRegex)?.[0];
             const [name, color] = (input as string).split(' / ');
+            console.log(input, name, color);
             glacier.addTag({ name, color, prop });
 
             event.target.value = '';
@@ -95,11 +96,9 @@ export default function AirdropForm() {
                 <button type='button' id='button' onClick={closeForm}>
                     Close
                 </button>
-
                 <input type='text' placeholder='Name' />
                 {tagInput('Progress', 'progress')}
                 {useMemo(() => datalist('progress'), [tags, tagsToObjects])}
-
                 {tagInput('Tags', 'tags', true)}
                 {useMemo(() => datalist('tags'), [tags, tagsToObjects])}
                 <div>
@@ -113,7 +112,6 @@ export default function AirdropForm() {
                         [currentAirdrop.tags]
                     )}
                 </div>
-
                 {tagInput('Cost to Farm', 'costToFarm', true)}
                 {useMemo(() => datalist('costToFarm'), [tags, tagsToObjects])}
                 <div>
@@ -125,7 +123,6 @@ export default function AirdropForm() {
                         ));
                     }, [currentAirdrop.costToFarm])}
                 </div>
-
                 {tagInput('Chain / Tech', 'chainTech', true)}
                 {useMemo(() => datalist('chainTech'), [tags, tagsToObjects])}
                 <div>
@@ -137,7 +134,6 @@ export default function AirdropForm() {
                         ));
                     }, [currentAirdrop.chainTech])}
                 </div>
-
                 {tagInput('Stage', 'stage')}
                 {useMemo(() => datalist('stage'), [tags, tagsToObjects])}
                 {tagInput('Tier', 'tier')}
@@ -146,15 +142,20 @@ export default function AirdropForm() {
                 {useMemo(() => datalist('priority'), [tags, tagsToObjects])}
                 {tagInput('Status', 'status')}
                 {useMemo(() => datalist('status'), [tags, tagsToObjects])}
-
                 <input type='text' placeholder='Funding' />
                 <input type='text' placeholder='Val' />
-
                 {dateInput('Bridge Date')}
                 {dateInput('First Tx')}
-
                 <input type='text' placeholder='Completion' />
                 <input type='text' placeholder='Referral' />
+                <div>
+                    <input type='checkbox' />
+                    <h2>Snapshot</h2>
+                </div>
+
+                <input type='text' placeholder='Image URL' />
+                <textarea name='about' id='about' placeholder='About The Project'></textarea>
+                <textarea name='tasks' id='tasks' placeholder='Tasks'></textarea>
 
                 {useMemo(
                     () => (
