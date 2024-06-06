@@ -1,21 +1,21 @@
 :root {
     @media (prefers-color-scheme: light) {
-        --background-color: #f9fafb;
+        --background-color: #e7f8ed;
 
-        --primary-color: #6d81a2;
-        --secondary-color: #abb8ce;
+        --primary-color: #18773b;
+        --secondary-color: #71ef9d;
 
-        --text-color: #111317;
-        --accent-color: #8599bc;
+        --text-color: #0b1910;
+        --accent-color: #09dc57;
     }
     @media (prefers-color-scheme: dark) {
-        --background-color: #040506;
+        --background-color: #07180d;
 
-        --primary-color: #5d7192;
-        --secondary-color: #313e54;
+        --primary-color: #86e7a9;
+        --secondary-color: #108f3d;
 
-        --text-color: #e8eaee;
-        --accent-color: #43577a;
+        --text-color: #e7f5ec;
+        --accent-color: #22f66e;
     }
 }
 
@@ -50,7 +50,7 @@ a {
 }
 
 ::-webkit-scrollbar {
-    background: var(--accent-color);
+    background: var(--secondary-color);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -62,26 +62,16 @@ a {
 
     border: 1px solid var(--primary-color);
     border-radius: 4px;
-    background-color: var(--primary-color);
-
-    color: var(--background-color);
+    background-color: var(--secondary-color);
 
     cursor: pointer;
-
-    @media (prefers-color-scheme: light) {
-        color: var(--background-color);
-    }
-    @media (prefers-color-scheme: dark) {
-        color: var(--text-color);
-    }
 }
 
 #tag {
-    width: min-content;
+    width: fit-content;
     height: min-content;
 
     padding: 0.3rem 1rem;
-    margin: 0.3rem 0.5rem;
 
     border-radius: 3px;
 
