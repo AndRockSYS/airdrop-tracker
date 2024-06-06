@@ -14,6 +14,7 @@ import AirdropDescription from '@/components/AirdropDescription';
 import { sortBy } from '@/utils/airdrop-utils';
 
 import './home.css';
+import { FormState } from 'types';
 
 export default function Home() {
     const { isOwner } = useOwner();
@@ -26,6 +27,8 @@ export default function Home() {
     const [ownerColumn, setOwnerColumn] = useState<JSX.Element>(<></>);
 
     const [sortProperty, setSortProperty] = useState('name');
+
+    const [call, setCall] = useState(false);
 
     useEffect(() => {
         const heads = document.querySelectorAll(
@@ -76,12 +79,28 @@ export default function Home() {
                 );
             });
         }
-    }, [glacier, isOwner, tags, sortProperty, sortBy]);
+
+        document.addEventListener('airdrops', () => setCall(!call));
+
+        return () => document.removeEventListener('airdrops', () => setCall(!call));
+    }, [glacier, isOwner, tags, sortProperty, sortBy, call, setCall]);
+
+    const [addButton, setAddButton] = useState(<></>);
+
+    useEffect(() => {
+        if (isOwner)
+            setAddButton(
+                <button id='button' className='add-airdrop' onClick={() => openForm(FormState.Add)}>
+                    Add Airdrop
+                </button>
+            );
+        else setAddButton(<></>);
+    }, [isOwner]);
 
     return (
         <>
             <main>
-                <table className='airdrops'>
+                <table>
                     <thead>
                         <tr>
                             <th onClick={() => setSortProperty('name')}>Name</th>
@@ -101,6 +120,7 @@ export default function Home() {
                     </thead>
                     <tbody>{list}</tbody>
                 </table>
+                {addButton}
             </main>
             <AirdropForm />
             {useMemo(

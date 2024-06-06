@@ -24,6 +24,11 @@ const useForm = () => {
         formState == FormState.Add ? glacier.addAirdrop(airdrop) : glacier.updateAirdrop(airdrop);
 
         closeForm();
+
+        new Promise((resolve) => setTimeout(resolve, 5_000)).then(() => {
+            const recallAirdrops = new CustomEvent('airdrops');
+            document.dispatchEvent(recallAirdrops);
+        });
     };
 
     const addTagToList = (

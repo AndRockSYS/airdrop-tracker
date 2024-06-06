@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import useGlacier from './useGlacier';
 
@@ -13,6 +13,8 @@ const useTags = () => {
 
     const { tags, setTags } = useContext(DataContext);
 
+    const [call, setCall] = useState(false);
+
     useEffect(() => {
         if (!glacier) return;
 
@@ -23,7 +25,11 @@ const useTags = () => {
         });
 
         setTags(result);
-    }, [glacier]);
+
+        document.addEventListener('call', () => setCall(!call));
+
+        return () => document.removeEventListener('call', () => setCall(!call));
+    }, [glacier, call]);
 
     const tagsToObjects = (tagsInput?: string): JSX.Element[] => {
         if (!tagsInput) return [];
