@@ -22,7 +22,7 @@ export default function AirdropPage({ airdrop, tagsToObjects }: Props) {
         <section className='airdrop-page'>
             <div>
                 <Image
-                    src={airdrop.image ? airdrop.image : '/blank.png'}
+                    src={airdrop.image ? airdrop.image : '/blank.svg'}
                     alt={airdrop.name}
                     width={25}
                     height={25}
