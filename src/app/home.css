@@ -20,7 +20,7 @@ main {
         cursor: pointer;
     }
 
-    thead > tr > th {
+    thead th {
         cursor: pointer;
     }
 
@@ -29,22 +29,23 @@ main {
         padding: 0 0.4rem;
 
         text-align: center;
-        align-items: center;
 
-        border: 1px solid var(--border-color);
-        background-color: var(--main-gray);
+        border: 1px solid var(--accent-color);
+        background-color: var(--background-color);
 
         white-space: nowrap;
 
-        > * {
-            margin: 0.3rem;
-        }
-    }
-
-    th,
-    td {
         border-top: 0;
         border-left: 0;
+
+        > * {
+            margin: 0.5rem;
+
+            margin: 0 auto;
+
+            display: flex;
+            justify-content: center;
+        }
     }
 
     th:last-child,

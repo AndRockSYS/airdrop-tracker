@@ -5,30 +5,60 @@ section.airdrop-page {
     top: 0;
     right: 0;
 
-    overflow-x: hidden;
-
     height: calc(100% - 4rem);
     width: 50%;
 
     padding: 2rem;
+    row-gap: 2rem;
 
     display: none;
-    grid-template-columns: repeat(2, 1fr);
-    align-items: center;
-    gap: 0.7rem 3rem;
+    flex-direction: column;
 
-    background-color: rgba(40, 40, 40, 1);
+    background-color: var(--secondary-color);
 
-    text-align: center;
+    text-align: left;
 
-    > div {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    overflow-y: auto;
+
+    img {
+        width: 1.5rem;
+        height: 1.5rem;
     }
 
     * {
-        width: stretch;
+        color: var(--text-color);
+    }
+
+    > :first-child {
+        display: flex;
+        column-gap: 0.5rem;
+        align-items: center;
+    }
+
+    > div {
+        border-bottom: 3px solid var(--accent-color);
+    }
+
+    > :nth-child(2) {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        align-items: center;
+        justify-items: start;
+
+        > h3 {
+            margin: 0.3rem 0;
+        }
+
+        > div {
+            display: flex;
+        }
+    }
+
+    > :nth-child(3),
+    > :nth-child(4) {
+        > h2 {
+            margin-bottom: 0.3rem;
+        }
     }
 
     @media screen and (max-width: 900px) {
