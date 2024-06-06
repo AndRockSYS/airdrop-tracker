@@ -9,12 +9,13 @@ section.airdrop-page {
     width: 50%;
 
     padding: 2rem;
-    row-gap: 2rem;
+    row-gap: 1rem;
 
     display: none;
     flex-direction: column;
 
-    background-color: var(--secondary-color);
+    background-color: var(--background-color);
+    border-left: 3px solid var(--primary-color);
 
     text-align: left;
 
@@ -25,8 +26,8 @@ section.airdrop-page {
         height: 1.5rem;
     }
 
-    * {
-        color: var(--text-color);
+    > * {
+        padding: 0.5rem;
     }
 
     > :first-child {
@@ -36,21 +37,19 @@ section.airdrop-page {
     }
 
     > div {
-        border-bottom: 3px solid var(--accent-color);
+        border-bottom: 2px solid var(--secondary-color);
     }
 
     > :nth-child(2) {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
+        row-gap: 0.5rem;
         align-items: center;
         justify-items: start;
 
-        > h3 {
-            margin: 0.3rem 0;
-        }
-
         > div {
             display: flex;
+            column-gap: 0.5rem;
         }
     }
 

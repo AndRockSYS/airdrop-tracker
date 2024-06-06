@@ -8,7 +8,7 @@ section.airdrop-form {
     width: 100dvw;
     height: fit-content;
 
-    background-color: var(--secondary-color);
+    background-color: var(--background-color);
 }
 
 form.airdrop-form {
