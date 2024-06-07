@@ -77,3 +77,9 @@ a {
 
     text-align: center;
 }
+
+#images {
+    @media (prefers-color-scheme: dark) {
+        filter: brightness(0) invert(1);
+    }
+}

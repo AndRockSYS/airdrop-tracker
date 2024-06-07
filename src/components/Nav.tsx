@@ -12,10 +12,16 @@ export default function Nav() {
         <nav>
             <h2>Airdrop Tracker</h2>
             <div>
-                <Image src={'/telegram.png'} alt='telegram' width={25} height={25}></Image>
-                <Image src={'/x.png'} alt='x' width={25} height={25}></Image>
+                <Image
+                    id='images'
+                    src={'/telegram.png'}
+                    alt='telegram'
+                    width={25}
+                    height={25}
+                ></Image>
+                <Image id='images' src={'/x.png'} alt='x' width={25} height={25}></Image>
+                <WalletButton />
             </div>
-            <WalletButton />
         </nav>
     );
 }

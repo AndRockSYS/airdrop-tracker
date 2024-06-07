@@ -64,6 +64,7 @@ export default function AirdropRow({
                         {airdrop.name}
                     </h3>
                     <Image
+                        id='images'
                         onClick={() =>
                             page == Page.Main ? addPinned(airdrop) : removePinned(airdrop)
                         }
