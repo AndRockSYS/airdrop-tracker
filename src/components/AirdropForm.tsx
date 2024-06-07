@@ -37,7 +37,7 @@ export default function AirdropForm() {
             event.target.value = '';
             event.target.placeholder = prop;
 
-            new Promise((resolve) => setTimeout(resolve, 5_000)).then(() => {
+            new Promise((resolve) => setTimeout(resolve, 10_000)).then(() => {
                 const recallTags = new CustomEvent('call');
                 document.dispatchEvent(recallTags);
             });
