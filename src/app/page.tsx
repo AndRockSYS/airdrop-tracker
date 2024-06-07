@@ -18,6 +18,7 @@ import { sortBy } from '@/utils/airdrop-utils';
 import './home.css';
 import './footer.css';
 import { FormState } from 'types';
+import Link from 'next/link';
 
 enum Page {
     Main,
@@ -178,8 +179,10 @@ export default function Home() {
                 [currentAirdrop, tags]
             )}
             <footer>
-                Powered By Glacier{' '}
-                <Image src={'/glacier.png'} alt='glacier' width={25} height={25}></Image>
+                <Link href='https://www.glacier.io' target='_blank'>
+                    Powered By Glacier
+                    <Image src={'/glacier.png'} alt='glacier' width={25} height={25}></Image>
+                </Link>
             </footer>
         </>
     );
