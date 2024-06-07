@@ -15,7 +15,7 @@ export default class Glacier {
         const namespace = client.namespace('WenAirdrop');
 
         this.airdropCollection = namespace.dataset('airdrop').collection('airdrops');
-        this.tagsCollection = namespace.dataset('airdop').collection('tags');
+        this.tagsCollection = namespace.dataset('airdrop').collection('tags');
     }
 
     async getAirdrops(): Promise<Airdrop[]> {
