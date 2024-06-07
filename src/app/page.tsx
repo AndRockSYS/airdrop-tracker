@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 
 import useOwner from '@/hooks/useOwner';
@@ -15,6 +16,7 @@ import AirdropDescription from '@/components/AirdropDescription';
 import { sortBy } from '@/utils/airdrop-utils';
 
 import './home.css';
+import './footer.css';
 import { FormState } from 'types';
 
 enum Page {
@@ -175,6 +177,10 @@ export default function Home() {
                 ),
                 [currentAirdrop, tags]
             )}
+            <footer>
+                Powered By Glacier{' '}
+                <Image src={'/glacier.png'} alt='glacier' width={25} height={25}></Image>
+            </footer>
         </>
     );
 }
