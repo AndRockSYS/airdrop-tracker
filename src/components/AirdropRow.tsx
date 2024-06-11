@@ -84,7 +84,7 @@ export default function AirdropRow({
                 <td>{airdrop.funding ? `$${airdrop.funding}` : ''}</td>
                 <td>{airdrop.val ? `$${airdrop.val}` : ''}</td>
 
-                <td>{airdrop.stage}</td>
+                <td>{tagsToObjects(airdrop.stage)}</td>
 
                 <td>{tagsToObjects(airdrop.tags)}</td>
                 <td>{tagsToObjects(airdrop.chainTech)}</td>
